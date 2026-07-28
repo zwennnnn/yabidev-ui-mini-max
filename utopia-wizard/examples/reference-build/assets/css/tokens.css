@@ -1,0 +1,82 @@
+/* Palette: re-concrete (real estate / architecture)
+   Copied verbatim from core/PALETTES.md. Contrast is already verified:
+   ink/bg 16.3:1 · ink2/bg 6.62:1 · accentInk/accent 5.13:1 · accent/bg 4.83:1
+   accentAlt/flipBg 4.72:1 · flipInk/flipBg 16.3:1                              */
+
+:root {
+  /* Color — 11 tokens, no others exist */
+  --bg: #EDEBE6;
+  --surface: #FAF9F6;
+  --line: #CAC6BD;
+  --ink: #131416;
+  --ink-2: #575553;
+  --accent: #B03A08;
+  --accent-ink: #FFFFFF;
+  --accent-alt: #E14A0A;
+  --accent-alt-ink: #0A0A0A;
+  --flip-bg: #131416;
+  --flip-ink: #EDEBE6;
+
+  /* Type */
+  --font-display: 'Archivo', system-ui, sans-serif;
+  --font-body: 'IBM Plex Sans', system-ui, sans-serif;
+
+  --text-xs: 0.75rem;
+  --text-sm: 0.875rem;
+  --text-base: 1rem;
+  --text-lg: 1.125rem;
+
+  --display-1: clamp(2.75rem, 8vw, 7rem);
+  --display-2: clamp(2rem, 5.5vw, 4.5rem);
+  --display-3: clamp(1.5rem, 3.5vw, 2.75rem);
+  --display-4: clamp(1.25rem, 2vw, 1.75rem);
+
+  --lh-display: 0.95;
+  --lh-heading: 1.15;
+  --lh-body: 1.6;
+
+  --ls-display: -0.03em;
+  --ls-heading: -0.015em;
+  --ls-caps: 0.08em;
+
+  /* Space */
+  --space-1: 0.25rem;
+  --space-2: 0.5rem;
+  --space-3: 0.75rem;
+  --space-4: 1rem;
+  --space-5: 1.5rem;
+  --space-6: 2rem;
+  --space-7: 3rem;
+  --space-8: 4rem;
+  --space-9: 6rem;
+  --space-10: 10rem;
+
+  /* Layout */
+  --container: 1440px;
+  --gutter: clamp(1.25rem, 4vw, 4rem);
+  --measure: 68ch;
+  --section-y: clamp(4rem, 10vh, 9rem);
+  --radius: 0px;
+
+  /* Layers */
+  --z-sticky: 10;
+  --z-nav: 100;
+  --z-cursor: 9998;
+  --z-grain: 9999;
+
+  /* Motion */
+  --ease-out: cubic-bezier(0.22, 1, 0.36, 1);
+  --ease-snap: cubic-bezier(0.16, 1, 0.30, 1);
+  --ease-both: cubic-bezier(0.65, 0, 0.35, 1);
+  --ease-exit: cubic-bezier(0.55, 0, 1, 0.45);
+
+  --dur-1: 120ms;
+  --dur-2: 240ms;
+  --dur-3: 420ms;
+  --dur-4: 700ms;
+  --dur-5: 1100ms;
+
+  --stagger: 60ms;
+  --lift: 24px;
+  --lift-sm: 14px;
+}

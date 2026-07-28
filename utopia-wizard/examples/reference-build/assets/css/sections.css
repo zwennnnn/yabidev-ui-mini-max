@@ -1,0 +1,325 @@
+/* Scene composition. Archetypes: O1 opening, S1 ledger, S3 specimens,
+   S6 marquee, S4 statement as flip scene, S5 table, S8 closing.          */
+
+/* ---------------------------------------------------------------- nav */
+
+.nav {
+  position: sticky;
+  top: 0;
+  z-index: var(--z-nav);
+  background-color: var(--bg);
+  border-bottom: 1px solid var(--line);
+}
+.nav__inner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-5);
+  padding-block: var(--space-4);
+}
+.nav__mark {
+  font-family: var(--font-display);
+  font-weight: 600;
+  letter-spacing: var(--ls-heading);
+  text-decoration: none;
+  /* 44px minimum touch target, met by the link box rather than by font size. */
+  display: inline-flex;
+  align-items: center;
+  min-height: 44px;
+}
+.nav__links { display: flex; gap: var(--space-6); list-style: none; padding: 0; }
+.nav__links a {
+  display: inline-flex;
+  align-items: center;
+  min-height: 44px;
+  text-decoration: none;
+  font-size: var(--text-sm);
+  color: var(--ink-2);
+  transition: color var(--dur-1) var(--ease-snap);
+}
+.nav__links a:hover { color: var(--ink); }
+
+@media (max-width: 700px) {
+  .nav__links { display: none; }
+}
+
+/* ---------------------------------------------------------------- O1 opening */
+
+.open {
+  min-height: 84svh;
+  display: grid;
+  align-content: space-between;
+  gap: var(--space-8);
+  padding-block: var(--space-9) var(--space-7);
+}
+.open__meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2) var(--space-4);
+  animation: rise var(--dur-4) var(--ease-out) both;
+}
+.open__title {
+  font-size: var(--display-1);
+  line-height: 0.92;
+  letter-spacing: var(--ls-display);
+  max-width: 15ch;
+}
+.open__foot {
+  display: flex;
+  align-items: end;
+  justify-content: space-between;
+  gap: var(--space-6);
+  flex-wrap: wrap;
+  border-top: 1px solid var(--line);
+  padding-top: var(--space-5);
+  animation: rise var(--dur-4) var(--ease-out) 320ms both;
+}
+.open__foot p { max-width: 34ch; color: var(--ink-2); }
+
+/* ---------------------------------------------------------------- S1 ledger */
+
+.ledger { border-top: 1px solid var(--line); }
+.ledger__row {
+  display: grid;
+  grid-template-columns: 3fr 9fr;
+  gap: var(--gutter);
+  padding-block: var(--space-7);
+  border-bottom: 1px solid var(--line);
+}
+.ledger__label { color: var(--ink-2); font-variant-numeric: tabular-nums; }
+.ledger__body h3 { margin-bottom: var(--space-3); }
+
+@media (max-width: 800px) {
+  .ledger__row { grid-template-columns: 1fr; gap: var(--space-3); padding-block: var(--space-6); }
+}
+
+/* ---------------------------------------------------------------- S3 specimens
+   A collection with no cards: no boxes, no shadows, no rounded corners.
+   Deliberately uneven column spans.                                        */
+
+.specimens {
+  display: grid;
+  grid-template-columns: repeat(12, 1fr);
+  gap: var(--space-8) var(--gutter);
+}
+.specimen:nth-child(3n+1) { grid-column: span 7; }
+.specimen:nth-child(3n+2) { grid-column: span 5; }
+.specimen:nth-child(3n+3) { grid-column: span 12; }
+
+.specimen__plate {
+  aspect-ratio: 4 / 3;
+  background-color: var(--surface);
+  border: 1px solid var(--line);
+  display: grid;
+  place-content: center;
+  overflow: hidden;
+}
+.specimen:nth-child(3n+3) .specimen__plate { aspect-ratio: 21 / 9; }
+
+.specimen__glyph {
+  font-family: var(--font-display);
+  font-size: clamp(3rem, 8vw, 7rem);
+  font-weight: 600;
+  color: var(--accent);
+  letter-spacing: var(--ls-display);
+  line-height: 1;
+}
+
+.specimen figcaption {
+  display: flex;
+  justify-content: space-between;
+  gap: var(--space-4);
+  border-top: 1px solid var(--line);
+  padding-top: var(--space-3);
+  margin-top: var(--space-3);
+  font-size: var(--text-sm);
+  color: var(--ink-2);
+}
+.specimen figcaption strong { color: var(--ink); font-weight: 500; }
+
+@media (max-width: 800px) {
+  /* Match the nth-child specificity instead of reaching for !important. */
+  .specimen:nth-child(3n+1),
+  .specimen:nth-child(3n+2),
+  .specimen:nth-child(3n+3) { grid-column: span 12; }
+
+  .specimen__plate,
+  .specimen:nth-child(3n+3) .specimen__plate { aspect-ratio: 3 / 2; }
+}
+
+/* ---------------------------------------------------------------- S6 marquee */
+
+.marquee {
+  overflow: hidden;
+  border-block: 1px solid var(--line);
+  padding-block: var(--space-4);
+}
+.marquee__row {
+  display: flex;
+  gap: var(--space-6);
+  width: max-content;
+  animation: marquee 32s linear infinite;
+  font-family: var(--font-display);
+  font-size: var(--display-4);
+  color: var(--ink-2);
+  white-space: nowrap;
+}
+.marquee:hover .marquee__row { animation-play-state: paused; }
+.marquee__row span[aria-hidden] { color: var(--accent); }
+
+@keyframes marquee {
+  from { transform: translate3d(0, 0, 0); }
+  to   { transform: translate3d(-50%, 0, 0); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .marquee__row { animation: none; }
+  .marquee { overflow-x: auto; }
+}
+
+/* ---------------------------------------------------------------- E01 flip scene
+   The peak. A full-bleed tonal inversion — this is what replaces a gradient. */
+
+.flip {
+  background-color: var(--bg);
+  color: var(--ink);
+  padding-block: var(--space-10);
+  transition:
+    background-color var(--dur-5) var(--ease-both),
+    color var(--dur-5) var(--ease-both);
+}
+.flip.is-flipped { background-color: var(--flip-bg); color: var(--flip-ink); }
+
+.flip__kicker { color: var(--ink-2); transition: color var(--dur-5) var(--ease-both); }
+.flip.is-flipped .flip__kicker { color: var(--accent-alt); }
+
+.flip__title {
+  font-size: clamp(2rem, 6vw, 5rem);
+  line-height: 1.05;
+  letter-spacing: var(--ls-display);
+  max-width: 18ch;
+  margin-block: var(--space-5) var(--space-7);
+}
+
+.flip__cta {
+  display: inline-block;
+  border: 1px solid currentColor;
+  padding: var(--space-4) var(--space-6);
+  text-decoration: none;
+  min-height: 44px;
+  transition:
+    background-color var(--dur-2) var(--ease-snap),
+    color var(--dur-2) var(--ease-snap),
+    transform var(--dur-2) var(--ease-snap);
+}
+.flip.is-flipped .flip__cta:hover {
+  background-color: var(--accent-alt);
+  border-color: var(--accent-alt);
+  color: var(--accent-alt-ink);
+}
+.flip__cta:hover { transform: translateY(-2px); }
+
+/* ---------------------------------------------------------------- S5 table
+   The silent section. No animation at all — it is what makes the flip loud. */
+
+.table-wrap { overflow-x: auto; }
+.table { width: 100%; border-collapse: collapse; }
+.table caption {
+  text-align: left;
+  color: var(--ink-2);
+  padding-bottom: var(--space-4);
+}
+.table th,
+.table td {
+  text-align: left;
+  padding: var(--space-4) var(--space-3);
+  border-bottom: 1px solid var(--line);
+  font-variant-numeric: tabular-nums;
+}
+.table th {
+  color: var(--ink-2);
+  font-weight: 500;
+  font-size: var(--text-sm);
+  text-transform: uppercase;
+  letter-spacing: var(--ls-caps);
+}
+.table tbody tr { transition: background-color var(--dur-1) var(--ease-snap); }
+.table tbody tr:hover { background-color: var(--surface); }
+
+@media (max-width: 700px) {
+  .table { min-width: 34rem; }
+}
+
+/* ---------------------------------------------------------------- S8 closing
+   Accent-filled block. Not the flip scene — the two never sit adjacent.    */
+
+.closing {
+  background-color: var(--accent);
+  color: var(--accent-ink);
+  padding-block: var(--space-10);
+}
+.closing__title {
+  font-size: clamp(2rem, 6vw, 4.5rem);
+  line-height: 1.05;
+  letter-spacing: var(--ls-display);
+  max-width: 16ch;
+}
+.closing__link {
+  display: inline-block;
+  margin-top: var(--space-7);
+  font-family: var(--font-display);
+  font-size: clamp(1.5rem, 4vw, 3rem);
+  text-decoration: none;
+  border-bottom: 2px solid currentColor;
+  padding-bottom: var(--space-1);
+}
+.closing__meta {
+  margin-top: var(--space-8);
+  padding-top: var(--space-5);
+  border-top: 1px solid currentColor;
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-5) var(--space-8);
+  font-size: var(--text-sm);
+}
+
+/* ---------------------------------------------------------------- footer */
+
+.foot {
+  border-top: 1px solid var(--line);
+  padding-block: var(--space-6);
+  font-size: var(--text-sm);
+  color: var(--ink-2);
+}
+.foot__inner {
+  display: flex;
+  justify-content: space-between;
+  gap: var(--space-5);
+  flex-wrap: wrap;
+}
+
+/* ---------------------------------------------------------------- E13 cursor */
+
+.cursor {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  background-color: var(--accent);
+  pointer-events: none;
+  z-index: var(--z-cursor);
+  mix-blend-mode: difference;
+  transition: width var(--dur-2) var(--ease-snap), height var(--dur-2) var(--ease-snap);
+}
+.cursor.is-hovering { width: 52px; height: 52px; }
+
+@media (hover: none), (prefers-reduced-motion: reduce) {
+  .cursor { display: none; }
+}
+
+/* ---------------------------------------------------------------- E15 magnetic */
+
+[data-magnetic] { transition: transform var(--dur-2) var(--ease-out); }
+[data-magnetic]:active { transition-duration: 60ms; }
